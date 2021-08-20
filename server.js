@@ -1,8 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser')
-const confg = require('./config')
-const data = require('./templateData.json')
+const config = require('./config')
 
 const app = express()
 
