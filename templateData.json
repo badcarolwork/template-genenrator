@@ -1,0 +1,61 @@
+{
+  "templates":[
+   {
+      "id":1,
+      "temp_name":"Video in banner",
+      "adsize":[
+         "320x480",
+         "300x600",
+         "970x250",
+         "300x250",
+         "336x280"
+      ],
+      "form":{
+         "vid_url":"",
+         "img_backup":"",
+         "img_banner":"",
+         "landing_banner":"",
+         "lanidng_video":"",
+         "fld_src":"",
+         "fld_type":"",
+         "fld_cat":"",
+         "fld_u3":"",
+         "fld_u4":""
+      },
+      "file_ori_path":"",
+      "file_new_path":""
+   },
+   {
+    "id":2,
+    "temp_name":"Countdown",
+    "adsize":[
+       "320x480",
+       "300x600",
+       "970x250",
+       "300x250",
+       "336x280"
+    ],
+    "form":{
+       "img_backup":"",
+       "img_banner":"",
+       "landing_banner":"",
+       "lanidng_video":"",
+       "fld_src":"",
+       "fld_type":"",
+       "fld_cat":"",
+       "fld_u3":"",
+       "fld_u4":"",
+       "datetime":"12/27/2021 10:59:59",
+       "posX":60,
+       "posY":23,
+       "txtColor":"#ffffff",
+       "txtSize":26,
+       "txtSpacing":1,
+       "txtWeight":"bold"
+    },
+    "file_ori_path":"",
+    "file_new_path":""
+     }
+  ]
+      
+}
