@@ -2,7 +2,8 @@ const express = require('express');
 const cors = require('cors'); 
 const bodyParser = require('body-parser')
 const config = require('./config')
-const createTemplateRoutes = require('./routes/createTemplate-routes');
+const templates = require('./routes/templates-routes');
+const files = require('./routes/files-routes');
 
 const app = express()
 
@@ -12,7 +13,8 @@ app.use(cors());
 app.use(bodyParser.json());
 
 
-app.use('/api', createTemplateRoutes.routes);
+app.use('/api', templates.routes);
+app.use('/file', files.routes);
 
 
 app.listen(config.port, () => {

@@ -1,9 +1,9 @@
 const express = require('express');
-const {addTemplate } = require('../controllers/templateController');
+const {getFilePath } = require('../controllers/filesController');
 
 const router = express.Router();
 
-router.post('/template', addTemplate);
+router.get('/file', getFilePath);
 
 module.exports={
     routes: router

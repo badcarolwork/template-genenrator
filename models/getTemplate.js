@@ -1,5 +1,0 @@
-class getTemplate {
-    constructor(id){
-
-    }
-}

@@ -9,3 +9,5 @@ class createTemplate{
 
     }
 }
+
+module.exports = createTemplate;
