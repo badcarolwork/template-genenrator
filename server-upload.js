@@ -89,8 +89,8 @@ app.post('/upload', (req, res) => {
                                             throw err;
                                         } else {
                                             // get input val from form
-                                            let lpUrl = req.body.lpUrl;
-                                            let basicUrl = req.body.basicUrl;
+                                            // let lpUrl = req.body.lpUrl;
+                                            // let basicUrl = req.body.basicUrl;
                                             let vidSrc = req.body.vidSrc;
                                             let fldSrc = req.body.fldSrc;
                                             let fldType = req.body.fldType;
@@ -98,38 +98,23 @@ app.post('/upload', (req, res) => {
                                             let fldU3 = req.body.fldU3;
                                             let fldU4 = req.body.fldU4;
 
-                                            // rewrite the elements in html banner
+                                            // rewrite the elements in basicTracking JS
                                             const index = {
                                                 files: newPath + '/index.html',
                                                 from: ['_exitImgPath', '_bgImgPath'],
                                                 to: [bgImgName, bannerImgName],
                                             };
-                                            const vidTrack = {
-                                                files: newPath + '/basicVideo.js',
-                                                from: ['_basicUrlPath', '_vidFilePath', '_fldSrc', '_fldType', '_fldCat', '_fldU3', '_fldU4'],
-                                                to: [basicUrl, vidSrc, fldSrc, fldType, fldCat, fldU3, fldU4],
-                                            };
+                                            // const vidTrack = {
+                                            //     files: newPath + '/basicVideo.js',
+                                            //     from: ['_basicUrlPath', '_vidFilePath', '_fldSrc', '_fldType', '_fldCat', '_fldU3', '_fldU4'],
+                                            //     to: [basicUrl, vidSrc, fldSrc, fldType, fldCat, fldU3, fldU4],
+                                            // };
 
                                             const bsTrack = {
                                                 files: newPath + '/basicTracking.js',
-                                                from: ['_lpUrlPath', '_fldSrc', '_fldType', '_fldCat', '_fldU3', '_fldU4'],
-                                                to: [lpUrl, fldSrc, fldType, fldCat, fldU3, fldU4],
+                                                from: [ '_fldSrc', '_fldType', '_fldCat', '_fldU3', '_fldU4','_vidFilePath'],
+                                                to: [ fldSrc, fldType, fldCat, fldU3, fldU4,vidSrc ],
                                             };
-
-                                            replace(index)
-                                                .then(results => {
-                                                    console.log('Replacement results:', results);
-                                                })
-                                                .catch(error => {
-                                                    console.error('Error occurred:', error);
-                                                });
-                                            replace(vidTrack)
-                                                .then(results => {
-                                                    console.log('Replacement results:', results);
-                                                })
-                                                .catch(error => {
-                                                    console.error('Error occurred:', error);
-                                                });
 
                                             replace(bsTrack)
                                                 .then(results => {
