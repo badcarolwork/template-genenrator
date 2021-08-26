@@ -15,8 +15,19 @@ const imageFilter = function (req, file, cb) {
     cb(null, true);
 };
 
-const replaceValue = (req, res) =>{
-    console.log(res)
+const handleUploadImages = (request, response)=>{
+    console.log(request)
+}
+
+const replaceValue = (request, response) =>{
+    try {
+        const data = request.body;
+        console.log('show: '+data)
+        response.send('created successfully.')
+        
+    } catch (error) {
+        response.status(400).send(error.message);
+    }
 
     // const index = {
     //     files: path + '/index.html',
@@ -43,5 +54,6 @@ const replaceValue = (req, res) =>{
 
 module.exports = {
     replaceValue,
+    handleUploadImages,
     imageFilter
 }

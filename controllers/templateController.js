@@ -4,25 +4,25 @@ const firebase = require('../db');
 const createTemplate = require('../models/createTemplate');
 const firestore = firebase.firestore();
 
-const addTemplate = async(req,res,next)=>{
+const addTemplate = async(request,response,next)=>{
     try {
-        const data = req.body;
+        const data = request.body;
         await firestore.collection('temp_gen').doc(data.id).set(data);
-        res.send('created successfully.')
+        response.send('created successfully.')
         
     } catch (error) {
-        res.status(400).send(error.message);
+        response.status(400).send(error.message);
     }
 }
 
-const getAllTemplates = async(req, res, next)=>{
+const getAllTemplates = async(request, response, next)=>{
     try {
         const temp_data = await firestore.collection('temp_gen');
         const data = await temp_data.get()
         let template_list = [];
         
         if(data.empty){
-            res.status(404).send('List not found');
+            response.status(404).send('List not found');
         }else{
             data.forEach(item => {
                 const template = new createTemplate(
@@ -35,27 +35,27 @@ const getAllTemplates = async(req, res, next)=>{
                 );
                 template_list.push(template)
             });
-            res.send(template_list)
+            response.send(template_list)
         }
         
     } catch (error) {
-        res.status(400).send(error.message);
+        response.status(400).send(error.message);
     }
 }
 
 
-const getTemplate = async(req, res, next)=>{
+const getTemplate = async(request, response, next)=>{
     try {
-        const id = req.params.id;
+        const id = request.params.id;
         const template = await firestore.collection('temp_gen').doc(id);       
         const data = await template.get(); 
         if(!data.exists){
-            res.status(404).send('template not found');         
+            response.status(404).send('template not found');         
         }else{
-            res.send(data.data());
+            response.send(data.data());
         }     
     } catch (error) {
-        res.status(400).send(error.message);
+        response.status(400).send(error.message);
     }
 }
 

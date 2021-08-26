@@ -1,4 +1,4 @@
-class createTemplate{
+class createFile{
     constructor(id,temp_name,ad_size,temp_form,file_ori_path,file_new_path){
         this.id = id;
         this.temp_name = temp_name;
@@ -10,4 +10,4 @@ class createTemplate{
     }
 }
 
-module.exports = createTemplate;
+module.exports = createFile;

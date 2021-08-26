@@ -1,9 +1,9 @@
 const express = require('express');
-const {getFilePath } = require('../controllers/filesController');
+const {replaceValue } = require('../controllers/filesController');
 
 const router = express.Router();
 
-router.get('/file', getFilePath);
+router.post('/file', replaceValue);
 
 module.exports={
     routes: router
