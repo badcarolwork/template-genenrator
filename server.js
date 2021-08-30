@@ -17,7 +17,7 @@ app.get('/', (request, response) => {
 
 
 app.get('/api/temp-name', (request, response) => {
-  response.send(data)
+  response.send(request.body)
 })
 
 // dynamic param (the value that selected)

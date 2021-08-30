@@ -1,7 +1,6 @@
 'use strict';
-const fs = require('fs');
+
 const replace = require('replace-in-file');
-const multer = require('multer');
 
 const path = "../file/vib_320480/"
 
@@ -20,14 +19,8 @@ const handleUploadImages = (request, response)=>{
 }
 
 const replaceValue = (request, response) =>{
-    try {
-        const data = request.body;
-        console.log('show: '+data)
-        response.send('created successfully.')
-        
-    } catch (error) {
-        response.status(400).send(error.message);
-    }
+    console.log(request.body)
+    response.send(request.body)
 
     // const index = {
     //     files: path + '/index.html',

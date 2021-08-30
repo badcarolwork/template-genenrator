@@ -1,7 +1,8 @@
 const express = require('express');
-const {replaceValue } = require('../controllers/filesController');
 
 const router = express.Router();
+const {replaceValue } = require('../controllers/filesController');
+
 
 router.post('/file', replaceValue);
 

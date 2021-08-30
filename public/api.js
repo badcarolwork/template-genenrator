@@ -52,22 +52,21 @@ async function handleForm(e) {
         }
     });
     
-    let jsonData = JSON.stringify(obj);
-    console.log(jsonData)
+    let data = JSON.stringify(obj);
     
+    console.log(data)
     
-    await fetch(file_api, {
+   await fetch(file_api, {
         method: 'POST',      
-        body: jsonData
-
+        body: data
+    }).then((res)=>{
+        return res.json();
+    }).then((data)=>{
+        console.log('api err: '+data);
+    }).catch((err) =>{
+        console.log('api err: '+ err)
     })
-    .then((data) => {
-        console.log(data)
-    }).catch((error) => {
-        console.log(error)
-    })
+    
 }
 
-window.addEventListener('DOMContentLoaded', ()=>{
-    getFormContianer.addEventListener('submit', handleForm)
-})
+getFormContianer.addEventListener('submit', handleForm)
