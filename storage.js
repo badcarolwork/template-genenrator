@@ -9,36 +9,34 @@ const storage  = new Storage({
 
 const bucket = storage.bucket('template-generator-35e82.appspot.com');
 
+const bucketName = 'template-generator-35e82.appspot.com';
 const originalFolder = "vib_320480/";
 const newFolderPath = uuidv4()+'/';
 const fileNamesToCopy = ['index.html', '320480.css','basicTracking.js','basicVideo.js','video_320480_contain-up.css'];
-//const newfiles = [newFolderPath+'index.html', newFolderPath+'320480.css',newFolderPath+'basicTracking.js',newFolderPath+'basicVideo.js',newFolderPath+'video_320480_contain-up.css'];
-// let filename;
 
-function main(srcBucketName,srcFilename,destBucketName,destFileName) {
-    console.log(srcFilename)
-//   async function copyFile() {
-//     // Copies the file to the other bucket
-//     await storage
-//       .bucket(srcBucketName)
-//       .file(srcFilename)
-//       .copy(storage.bucket(destBucketName).file(destFileName));
-
-//     console.log(
-//       `gs://${srcBucketName}/${srcFilename} copied to gs://${destBucketName}/${destFileName}`
-//     );
-//   }
-
-//   copyFile().catch(console.error);
-}
 
 for (const fileNameEach of fileNamesToCopy) {
     const fileName = fileNameEach;
     // console.log(fileName)
-    main(srcBucketName = 'template-generator-35e82.appspot.com',
-        srcFilename = originalFolder + filename,
-        destBucketName = 'template-generator-35e82.appspot.com',
-        destFileName = newFolderPath + filename, ...process.argv.slice(2));
+   createNewTemplate(bucketName, originalFolder + fileName,bucketName, newFolderPath + fileName);
+    
+}
+
+function createNewTemplate(srcBucketName,  srcFilename, destBucketName,destFileName) {
+   async function copyFile() {
+    // Copies the file to the new folder
+    await storage
+      .bucket(srcBucketName)
+      .file(srcFilename)
+      .copy(storage.bucket(destBucketName).file(destFileName));
+
+    console.log(
+      `gs://${srcBucketName}/${srcFilename} copied to gs://${destBucketName}/${destFileName}`
+    );
+  }
+
+  copyFile().catch(console.error);
+//   [END storage_copy_file]
 }
 
 
