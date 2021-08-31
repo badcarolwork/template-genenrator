@@ -1,15 +1,15 @@
 const Performics = {};
 Performics.settings = {
   FLD: {
-    FLD_src: "_fldSrc",
-    FLD_type: "_fldType",
-    FLD_cat: "_fldCat",
+    FLD_src: "dsfds",
+    FLD_type: "fd34",
+    FLD_cat: "543t5",
     DBM_IMP: "IMP",
     DBM_CLK: "CLK",
     u1: "0",
     u2: "0",
-    u3: "_fldU3",
-    u4: "_fldU4",
+    u3: "rgr",
+    u4: "54ttr",
     u5: "0",
     u6: "0",
     u7: "0",
@@ -20,7 +20,7 @@ Performics.settings = {
   isResourceLoaded: false,
   is_clicked: false,
   videoCssLink: "video_320480_contain-up.css",
-  video_src: "_vidFilePath",
+  video_src: "ewq",
 };
 
 (function(settings){ 

@@ -1,7 +1,7 @@
 'use strict';
 
 const template_api = "http://localhost:3001/api/template/1"
-const file_api = "http://localhost:3001/create/file"
+const file_api = "/create/file"
 const getFormContianer = document.getElementById("get_form")
 
 
@@ -57,8 +57,12 @@ async function handleForm(e) {
     console.log(data)
     
    await fetch(file_api, {
-        method: 'POST',      
-        body: data
+        method: 'POST',    
+        headers: {
+            'Content-Type': 'application/json'
+          },  
+        body: data,
+        
     }).then((res)=>{
         return res.json();
     }).then((data)=>{

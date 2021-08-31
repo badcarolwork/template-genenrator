@@ -2,7 +2,7 @@
 
 const replace = require('replace-in-file');
 
-const path = "../file/vib_320480/"
+const path = "./file/vib_320480"
 
 
 const imageFilter = function (req, file, cb) {
@@ -19,28 +19,37 @@ const handleUploadImages = (request, response)=>{
 }
 
 const replaceValue = (request, response) =>{
-    console.log(request.body)
+    // console.log(request.body)
+    let data = request.body
     response.send(request.body)
 
-    // const index = {
-    //     files: path + '/index.html',
-    //     from: ['_bgImgName', '_bannerImgName'],
-    //     to: [bgImgName, bannerImgName],
-    // };
+    const index = {
+        files: path + '/index.html',
+        from: ['_bgImgName', '_bannerImgName'],
+        to: [data.image_backup, data.image_banner],
+    };
 
-    // const bsTrack = {
-    //     files: path + '/basicTracking.js',
-    //     from: [ '_fldSrc', '_fldType', '_fldCat', '_fldU3', '_fldU4','_vidFilePath'],
-    //     to: [ fldSrc, fldType, fldCat, fldU3, fldU4, vidSrc ]
-    // };
+    const bsTrack = {
+        files: path + '/basicTracking.js',
+        from: [ '_fldSrc', '_fldType', '_fldCat', '_fldU3', '_fldU4','_vidFilePath'],
+        to: [ data.floodlight_src, data.floodlight_type, data.floodlight_cat, data.floodlight_u3, data.floodlight_u4, data.video_url ]
+    };
 
-    // replace(bsTrack, index)
-    //     .then(results => {
-    //         console.log('Replacement results:', results);
-    //     })
-    //     .catch(error => {
-    //         console.error('Error occurred:', error);
-    //     });
+    replace(bsTrack)
+        .then(results => {
+            console.log('Replacement results:', results);
+        })
+        .catch(error => {
+            console.error('Error occurred:', error);
+        });
+
+    replace(index)
+    .then(results => {
+        console.log('Replacement results:', results);
+    })
+    .catch(error => {
+        console.error('Error occurred:', error);
+    });
 
 
 }
