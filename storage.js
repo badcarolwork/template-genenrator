@@ -1,6 +1,9 @@
 
 const {Storage} = require('@google-cloud/storage');
 const { v4: uuidv4 } = require('uuid');
+const replace = require('replace-in-file');
+const fs = require('fs');
+const os = require('os');
 
 
 const storage  = new Storage({
@@ -14,130 +17,92 @@ const originalFolder = "vib_320480/";
 const newFolderPath = uuidv4()+'/';
 const fileNamesToCopy = ['index.html', '320480.css','basicTracking.js','basicVideo.js','video_320480_contain-up.css'];
 
+let copyFileStatus = false;
 
-for (const fileNameEach of fileNamesToCopy) {
+
+const loopFiles = () =>{
+  for (const fileNameEach of fileNamesToCopy) {
     const fileName = fileNameEach;
     // console.log(fileName)
-   createNewTemplate(bucketName, originalFolder + fileName,bucketName, newFolderPath + fileName);
-    
+    createNewTemplateFolder(bucketName, originalFolder + fileName,bucketName, newFolderPath + fileName);      
+  }
+  if(copyFileStatus){
+    uploadCombineDelete(newFolderPath+'/index.html')
+  }
+
 }
 
-function createNewTemplate(srcBucketName,  srcFilename, destBucketName,destFileName) {
-   async function copyFile() {
+
+const createNewTemplateFolder = async (srcBucketName,  srcFilename, destBucketName,destFileName) =>{
     // Copies the file to the new folder
     await storage
       .bucket(srcBucketName)
       .file(srcFilename)
-      .copy(storage.bucket(destBucketName).file(destFileName));
+      .copy(storage.bucket(destBucketName).file(destFileName))
+      .then(() =>{
+        // console.log('copied')
+        copyFileStatus = true;
+      }).catch((err) =>{
+        console.log(err)
+        copyFileStatus = false;
+      });
 
-    console.log(
-      `gs://${srcBucketName}/${srcFilename} copied to gs://${destBucketName}/${destFileName}`
-    );
-  }
-
-  copyFile().catch(console.error);
-//   [END storage_copy_file]
+    // console.log(`gs://${srcBucketName}/${srcFilename} copied to gs://${destBucketName}/${destFileName}`);
+    // console.log(copyFileStatus)
 }
 
 
+const uploadCombineDelete = (originaIndex, originalJs, data) => {
 
+  // const localFiles = [os.tmpdir() + '/index.html',os.tmpdir() + '/basicTracking.html' ]
+  const localFile = os.tmpdir() + '/index.html';
+  let inputdata = "";
+  bucket.file(originaIndex).createReadStream(originaIndex)
+    .on('error', (err) =>{
+      // console.log(err)
+    })
+    .on('response', (response) => {
+      // console.log(response)
+    })
+    .on("data", (chunk) => {
+      inputdata += chunk;
+    })
+    .on('end', () =>{
+      console.log('input:'+inputdata)
+    })
+    // .pipe(fs.createWriteStream(localFile));
 
+}
 
-// for (const fileName of fileNamesToCopy) {
-//     //    originalFile = fileName; 
-//        async function copyFile(){
-//         await storage
-//         .bucket(bucket)
-//         .file(originalFolder+'/'+fileName)
-//         .copy(storage.bucket(bucket).file(newFolderPath+'/'+fileName));
+const getFile =(path) => {
+  
+  const index = {
+    files: path + '/index.html',
+    from: ['_bgImgName', '_bannerImgName'],
+    to: [data.image_backup, data.image_banner],
+  };
 
-//         console.log(`gs://${srcBucketName}/${bucket} copied to gs://${bucket}/${destFileName}`);
-//        return copyFile().catch(console.error);    
-//     } 
-// }
-    
+  const bsTrack = {
+      files: path + '/basicTracking.js',
+      from: [ '_fldSrc', '_fldType', '_fldCat', '_fldU3', '_fldU4','_vidFilePath'],
+      to: [ data.floodlight_src, data.floodlight_type, data.floodlight_cat, data.floodlight_u3, data.floodlight_u4, data.video_url ]
+  };
 
-// const originalFiles = ['vib_320480/index.html', 'vib_320480/320480.css','vib_320480/basicTracking.js','vib_320480/basicVideo.js','vib_320480/video_320480_contain-up.css'];
-// const newfiles = [newFolderPath+'index.html', newFolderPath+'320480.css',newFolderPath+'basicTracking.js',newFolderPath+'basicVideo.js',newFolderPath+'video_320480_contain-up.css'];
+  replace(bsTrack)
+      .then(results => {
+          console.log('Replacement results:', results);
+      })
+      .catch(error => {
+          console.error('Error occurred:', error);
+      });
 
-// for (const originalFile of originalFiles && const newFile of newFiles ) {
-//     for (const newFile of newFiles ) {
+  replace(index)
+  .then(results => {
+      console.log('Replacement results:', results);
+  })
+  .catch(error => {
+      console.error('Error occurred:', error);
+  });
+}
 
-//         const srcBucketName = bucket;
-//         const srcFilename = originalFile;
-//         const destBucketName = bucket;
-//         const destFileName = newFile;
-
-//         const copyFile = await storage
-//         .bucket(bucket)
-//         .file(originalFile)
-//         .copy(storage.bucket(bucket).file(newFile));
-
-//         console.log(
-//         `gs://${bucket}/${originalFile} copied to gs://${bucket}/${newFile}`
-//         );
-
-//         copyFile().catch(console.error);
-// }
-    
-//   await storage
-//       .bucket(bucket)
-//       .file(originalFile)
-//       .copy(storage.bucket(bucket).file(newFile));
-
-//     console.log(
-//       `gs://${bucket}/${originalFile} copied to gs://${bucket}/${newFile}`
-//     );
-// }
-
-// function main(
-//   srcBucketName = 'template-generator-35e82.appspot.com',
-//   srcFilename = 'vib_320480/index.html',
-//   destBucketName = 'template-generator-35e82.appspot.com',
-//   destFileName = newFolderPath + '/index.html'
-// ) {
-//   async function copyFile() {
-//     // Copies the file to the other bucket
-//     await storage
-//       .bucket(srcBucketName)
-//       .file(srcFilename)
-//       .copy(storage.bucket(destBucketName).file(destFileName));
-
-//     console.log(
-//       `gs://${srcBucketName}/${srcFilename} copied to gs://${destBucketName}/${destFileName}`
-//     );
-//   }
-
-//   copyFile().catch(console.error);
-//   // [END storage_copy_file]
-// }
-// main(...process.argv.slice(2));
-
-
-
-// for (const originalFile of fileNamesToCopy) {
-
-//     function main( 
-//         srcBucketName = bucket,
-//         srcFilename = originalFolder+originalFile,
-//         destBucketName = bucket,
-//         destFileName = newFolderPath+originalFile
-//     ){      
-//         async function copyFile(){
-//         await storage
-//         .bucket(srcBucketName)
-//         .file(srcFilename)
-//         .copy(storage.bucket(destBucketName).file(destFileName));
-
-//         console.log(
-//         `gs://${srcBucketName}/${destBucketName} copied to gs://${srcBucketName}/${destFileName}`
-//         );
-//     }
-
-//         copyFile().catch(console.error);
-//     }
-    
-// }
-
-
-
+module.exports = {loopFiles}
