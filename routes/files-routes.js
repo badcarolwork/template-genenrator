@@ -1,10 +1,10 @@
 const express = require('express');
 
 const router = express.Router();
-const {replaceValue } = require('../controllers/filesController');
+const {loopFiles } = require('../controllers/filesController');
 
 
-router.post('/file', replaceValue);
+router.post('/file', loopFiles);
 
 module.exports={
     routes: router

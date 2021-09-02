@@ -1,7 +1,7 @@
 'use strict';
 
 const template_api = "http://localhost:3001/api/template/1"
-const file_api = "/create/file"
+const file_api = "http://localhost:3001/create/file"
 const getFormContianer = document.getElementById("get_form")
 
 

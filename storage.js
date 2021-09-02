@@ -1,4 +1,7 @@
 
+const express = require('express');
+const app = express();
+
 const {Storage} = require('@google-cloud/storage');
 const { v4: uuidv4 } = require('uuid');
 const replace = require('replace-in-file');
@@ -105,4 +108,4 @@ const getFile =(path) => {
   });
 }
 
-module.exports = {loopFiles}
+app.listen(3001, () => console.log("app listening"));
