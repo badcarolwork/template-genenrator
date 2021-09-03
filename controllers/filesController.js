@@ -1,18 +1,13 @@
 'use strict';
 
-const {Storage} = require('@google-cloud/storage');
+const gcStorage = require('../gcs')
 const { v4: uuidv4 } = require('uuid');
 const replace = require('replace-in-file');
 const fs = require('fs');
-const os = require('os');
 const tempDirectory = require('temp-dir');
+const multer = require('multer');
 
-
-const storage  = new Storage({
-    keyFilename: 'template-generator-35e82-be49740e7c14.json'
-});
-
-const bucket = storage.bucket('template-generator-35e82.appspot.com');
+const bucket = gcStorage.bucket('template-generator-35e82.appspot.com');
 const bucketName = 'template-generator-35e82.appspot.com';
 const originalFolder = "vib_320480/";
 const newFolderPath = uuidv4()+'/';
@@ -20,25 +15,74 @@ const fileNamesToCopy = ['index.html', '320480.css','basicTracking.js','basicVid
 let copiedFileAmout = 0;
 let stringtoReplace;
 
-const loopFiles = async(request,response) =>{
+
+const imageFilter = function (request, file, cb) {
+    // Accept images only
+    if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
+        request.fileValidationError = 'Only image files are allowed!';
+        return cb(new Error('Only image files are allowed!'), false);
+    }
+    cb(null, true);
+};
+
+const handleUploadImages = () =>{
+    const storage = multer.diskStorage({
+        destination: (request, file, cb) => {
+            cb(null, bucketName+newFolderPath);
+        },
+        filename: (request, file, cb) => {
+            cb(null, file.filename)
+        }
+    })
+
+    const upload = multer({ storage }).fields([{ name: "bgImg" }, { name: "bannerImg" }])
+
+    upload(request, response, (err) => {
+        // console.log(req.body)
+        if (request.fileValidationError) {
+            return response.send(req.fileValidationError);
+        }
+        else if (!request.files) {
+            return response.send('Please select an image to upload');
+        }
+        else if (err instanceof multer.MulterError) {
+            return request.send(err);
+        }
+        else if (err) {
+            return request.send(err);
+        } else {
+            // get img file names
+            let bgImgName, bannerImgName, imgname = [];
+            Object.values(req.files).map(i => {
+                i.forEach((v) => {
+                    imgname.push(v.originalname)
+                })
+            });
+            bgImgName = imgname[0];
+            bannerImgName = imgname[1];
+        }
+    })
+}
+
+const loopFiles = async(request,response, next) =>{
+    console.log(request.file)
+
     stringtoReplace= request.body;   
 
     for (const fileNameEach of fileNamesToCopy) {
         const fileName = fileNameEach;
         // console.log(fileName)
-        createNewTemplateFolder(bucketName, originalFolder + fileName,bucketName, newFolderPath + fileName, newFolderPath);      
+        // createNewTemplateFolder(bucketName, originalFolder + fileName,bucketName, newFolderPath + fileName, newFolderPath);      
     }   
-      
-    response.send("Folder Created ok.")
 
 }
 
 const createNewTemplateFolder = async (srcBucketName, srcFilename, destBucketName,destFileName, destFilePath) =>{
     // Copies the file to the new folder
-    await storage
+    await gcStorage
       .bucket(srcBucketName)
       .file(srcFilename)
-      .copy(storage.bucket(destBucketName).file(destFileName))
+      .copy(gcStorage.bucket(destBucketName).file(destFileName))
       .then(() =>{
         console.log('copy done '+ destFileName)
         copiedFileAmout++
@@ -46,6 +90,7 @@ const createNewTemplateFolder = async (srcBucketName, srcFilename, destBucketNam
       .catch((err) =>{
         console.log(err)
         copiedFileAmout--
+        sendRespone('failed')
       })
       
     if(copiedFileAmout === fileNamesToCopy.length){
@@ -63,6 +108,7 @@ const dlInTempFolder = (originaIndex) => {
     .on('error', (err) =>{
       console.log('read stream:' + err)
       done = false
+      sendRespone('failed')
     })  
     .on('response', (response) => {
         console.log('dlinTemp: '+ response)
@@ -79,8 +125,6 @@ const dlInTempFolder = (originaIndex) => {
 }
 
 const replaceStringinFiles = (indexFilePath) => {
-//   console.log(stringtoReplace)
-//   console.log('path:' + indexFilePath)
   
   const index = {
     files: indexFilePath,
@@ -94,22 +138,35 @@ const replaceStringinFiles = (indexFilePath) => {
   })
   .catch(error => {
       console.error('Error occurred:', error);
+      sendRespone('failed')
   });
 }
 
 const uploadDeleteTempFile = (localFilePath) => {
     const localPathFile =  fs.createReadStream(localFilePath);
-    let folderToUpload = bucket.file(newFolderPath);
+    let folderToUpload = bucket.file(newFolderPath+'index.html');
 
     localPathFile.pipe(folderToUpload.createWriteStream())
     .on('error', (err) => {
         console.log('upload to: ' + err);
+        sendRespone('failed')
     })
     .on('finish', ()=>{
         console.log('finish');
     })
 }
 
+const sendRespone = (status) =>{
+
+    if(status === 'success'){
+        response.status(200).send("New files has been created.")
+    }else{
+        response.status(500).send("New files has been created.")
+    }
+}
+    
+
 module.exports = {
-    loopFiles
+    loopFiles,
+    imageFilter
 }

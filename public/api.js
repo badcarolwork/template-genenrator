@@ -43,6 +43,7 @@ async function handleForm(e) {
     e.preventDefault();
     let dataForm = new FormData(e.target)
 
+    // console.log(dataForm.file)
     let obj = {}
     dataForm.forEach((value, key) => {
         obj[key] = value
@@ -54,14 +55,16 @@ async function handleForm(e) {
     
     let data = JSON.stringify(obj);
     
-    console.log(data)
+    // console.log(data)
     
    await fetch(file_api, {
         method: 'POST',    
         headers: {
             'Content-Type': 'application/json'
+            // 'Content-Type': 'multipart/form-data'
           },  
-        body: data,
+        // body: data
+        body: dataForm
         
     }).then((res)=>{
         return res.json();
