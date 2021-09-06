@@ -1,6 +1,6 @@
 'use strict';
 
-const firebase = require('../db');
+const firebase = require('../gc_db_connection');
 const createTemplate = require('../models/createTemplate');
 const firestore = firebase.firestore();
 
