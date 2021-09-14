@@ -1,7 +1,7 @@
 'use strict';
 
 const template_api = "http://localhost:3001/api/template/1"
-const file_api = "http://localhost:3001/create/file"
+const file_api = "http://localhost:3001/create/file/1"
 const getFormContianer = document.getElementById("get_form")
 
 
@@ -61,3 +61,18 @@ async function handleForm(e) {
 }
 
 getFormContianer.addEventListener('submit', handleForm)
+
+document.getElementById('listFile').addEventListener('click', async (e)=>{
+    e.preventDefault();
+
+    await fetch('http://localhost:3001/create/getFile/b4e94c40-3be7-4cf1-bede-c78d733047fc', {
+        method: 'POST'
+        
+    }).then((res)=>{
+        return res.json();
+    }).then((data)=>{
+        console.log('api data: '+ data);
+    }).catch((err) =>{
+        console.log('api err: '+ err)
+    })
+})
